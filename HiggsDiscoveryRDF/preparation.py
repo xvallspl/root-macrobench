@@ -61,13 +61,14 @@ def getFiles():
     del pool # I see the processes alive after this call...
 
 def compileMacro():
-    if os.path.exists(macroName.replace(".C","_C.so")):
-        logger.debug("ROOT Macro already compiled")
-        return
+#    if os.path.exists(macroName.replace(".C","_C.so")):
+#        logger.debug("ROOT Macro already compiled")
+#        return
     logger.debug("Compiling ROOT Macro")
     thisPath = os.path.dirname(__file__)
     shutil.copyfile(os.path.join(thisPath,macroName), macroName)
-    os.system('root -b -q -l -e ".L %s+"' %macroName)
+    os.system("g++ `root-config --glibs --cflags` -O2 higgsDiscovery.C -o higgsDiscovery.out")
+    # os.system(f'root.exe -b -q -l -e ".L {macroName}+({nThreads})"')
 
 def run():
     getFiles()

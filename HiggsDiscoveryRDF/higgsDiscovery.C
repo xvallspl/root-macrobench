@@ -11,6 +11,7 @@
 #include "TLegend.h"
 #include "TLorentzVector.h"
 #include "TStyle.h"
+#include <thread>
 
 using namespace ROOT::VecOps;
 using RNode = ROOT::RDF::RNode;
@@ -373,10 +374,11 @@ void plot(T sig, T bkg, T data, const std::string &x_label, const std::string &f
    c->SaveAs(filename.c_str());
 }
 
-void higgsDiscovery()
+void higgsDiscovery(unsigned threads)
 {
    // Enable multi-threading
-   ROOT::EnableImplicitMT();
+   std::cout<<"Executing with "<<threads<<" threads."<<std::endl;
+   ROOT::EnableImplicitMT(threads);
 
    // Create dataframes for signal, background and data samples
 
@@ -477,7 +479,17 @@ void higgsDiscovery()
    plot(h_sig_4l, h_bkg_4l, h_data_4l, "m_{4l} (GeV)", "higgs_4l.pdf");
 }
 
-int main()
+int main(int argc, char **argv)
 {
-   higgsDiscovery();
+   size_t nThreads = std::thread::hardware_concurrency();
+   std::cout<<argv[0]<<", "<<argv[1]<<", "<<argv[2]<<std::endl;
+   if(argc>1){
+      std::cout<<"More than one!"<<std::endl;
+      if(argv[1] == std::string("-n")){
+         std::cout<<"It is equal"<<std::endl;
+         std::stoul(argv[2], &nThreads, 10);
+      }
+   }
+   std::cout<<nThreads<<std::endl;
+   higgsDiscovery(nThreads);
 }

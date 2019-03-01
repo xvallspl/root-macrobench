@@ -13,7 +13,7 @@ import os
 
 def mkdirIfNotThere(name):
     if not os.path.exists(name):
-        os.mkdir(bmodWorkDir)
+        os.mkdir(name)
 
 def getWorkDirName(name):
     return "%s_workdir" %name

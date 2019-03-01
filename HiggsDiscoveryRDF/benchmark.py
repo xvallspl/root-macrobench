@@ -8,14 +8,14 @@ __copyright__ = "CERN"
 __license__ = "LGPL2"
 __email__ = "danilo.piparo@cern.ch"
 
-from utils.benchmarking import runBenchmark
+from utils.benchmarking import runParallelBenchmark
 import os
 
-def launchMacro():
-    os.system("root -b -q -l higgsDiscovery.C+")
-
+def launchBenchmark(nThreads):
+        os.system(f"./higgsDiscovery.out -n {nThreads}")
+    
 def run():
-    runBenchmark("HiggsDiscoveryRDF", launchMacro)
+    runParallelBenchmark("HiggsDiscoveryRDF", launchBenchmark)
 
 if __name__ == "__main__":
     run()
