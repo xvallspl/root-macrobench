@@ -62,14 +62,14 @@ def runParallelBenchmark(name, fcn):
     res = []
     cores = cpu_count()
     stride = 1 if cores <10 else cores //10
-    for nThreads in range(1, cores, stride):
-        start = time.perf_counter()
-        fcn(nThreads)
-        stop = time.perf_counter()
-        runtime = stop - start
-        logger.info("*** Benchmark Runtime: %.2f" %runtime)
-        res.append((nThreads, runtime))
-
+    for j in range(10):
+        for nThreads in range(1, cores, stride):
+            start = time.perf_counter()
+            fcn(nThreads)
+            stop = time.perf_counter()
+            runtime = stop - start
+            logger.info("*** Benchmark Runtime: %.2f" %runtime)
+            res.append((nThreads, runtime))
     logger.debug("Benchmark finished")
     outfilename = f"{name}.res"
     logger.debug(f"Dumping benchmark results on file {outfilename}")
