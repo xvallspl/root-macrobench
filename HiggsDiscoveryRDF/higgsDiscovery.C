@@ -481,15 +481,13 @@ void higgsDiscovery(unsigned threads)
 
 int main(int argc, char **argv)
 {
-   size_t nThreads = std::thread::hardware_concurrency();
+   unsigned nThreads = std::thread::hardware_concurrency();
    std::cout<<argv[0]<<", "<<argv[1]<<", "<<argv[2]<<std::endl;
    if(argc>1){
-      std::cout<<"More than one!"<<std::endl;
       if(argv[1] == std::string("-n")){
-         std::cout<<"It is equal"<<std::endl;
-         std::stoul(argv[2], &nThreads, 10);
+         nThreads = atoi(argv[2]);
       }
    }
-   std::cout<<nThreads<<std::endl;
+   std::cout<<"Starting a run with "<<nThreads<<" threads"<<std::endl;
    higgsDiscovery(nThreads);
 }
