@@ -11,8 +11,8 @@
 #include "TLegend.h"
 #include "TLorentzVector.h"
 #include "TStyle.h"
+#include <chrono>
 #include <thread>
-
 using namespace ROOT::VecOps;
 using RNode = ROOT::RDF::RNode;
 using rvec_f = const RVec<float> &;
@@ -461,10 +461,14 @@ void higgsDiscovery(unsigned threads)
    auto df_h_data_2el2mu = df_data_2el2mu_reco.Define("weight", []() { return 1.0; }, {})
                               .Histo1D({"h_data_2el2mu_doublemu", "", nbins, 70, 180}, "H_mass", "weight");
 
+   auto start = std::chrono::high_resolution_clock::now();
    // Produce histograms for different channels and make plots
    plot(df_h_sig_4mu, df_h_bkg_4mu, df_h_data_4mu, "m_{4#mu} (GeV)", "higgs_4mu.pdf");
    plot(df_h_sig_4el, df_h_bkg_4el, df_h_data_4el, "m_{4e} (GeV)", "higgs_4el.pdf");
    plot(df_h_sig_2el2mu, df_h_bkg_2el2mu, df_h_data_2el2mu, "m_{2e2#mu} (GeV)", "higgs_2el2mu.pdf");
+   auto end = std::chrono::high_resolution_clock::now();
+   std::chrono::duration<double> diff = end-start;
+   std::cout<<"Threads, time: "<<threads<<","<<diff.count()<<std::endl;
 
    // Combine channels for final plot
    auto h_data_4l = df_h_data_4mu.GetPtr();
